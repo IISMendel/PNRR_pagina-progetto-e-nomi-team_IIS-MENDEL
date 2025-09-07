@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Progetto PNRR – Per una comunità digitale | IIS Mendel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --mendel-green: #1f7a3a;
+      --mendel-green-2: #145b2b;
+      --mendel-green-light: #4ade80;
+      --mendel-gold: #fbbf24;
+      --bg: #0f172a;
+      --bg-light: #1e293b;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text-light: #f1f5f9;
+      --text-dark: #1f2937;
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --shadow-colored: 0 25px 50px -12px rgba(31, 122, 58, 0.3);
+      --gradient-hero: linear-gradient(135deg, var(--mendel-green) 0%, var(--mendel-green-2) 50%, #0f172a 100%);
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Nunito', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-light);
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: var(--mendel-green-light);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.2s ease;
+    }
+
+    .cursor-follower {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      background: rgba(74, 222, 128, 0.2);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.4s ease;
+      border: 2px solid var(--mendel-green-light);
+    }
+
+    /* Particles Background */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      background: var(--mendel-green-light);
+      border-radius: 50%;
+      opacity: 0.1;
+      animation: float-particles 20s infinite linear;
+    }
+
+    @keyframes float-particles {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.1;
+      }
+      90% {
+        opacity: 0.1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Loading Animation */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(74, 222, 128, 0.3);
+      border-top: 3px solid var(--mendel-green-light);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Header Enhanced */
+    header {
+      background: var(--gradient-hero);
+      color: var(--text-light);
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(74, 222, 128, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.3) 0%, transparent 50%);
+      animation: pulse-bg 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-bg {
+      0% { opacity: 0.3; }
+      100% { opacity: 0.7; }
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--text-light), var(--mendel-green-light), var(--mendel-gold));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: slideInUp 1s ease-out, shimmer 3s ease-in-out infinite;
+      background-size: 200% 200%;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 1.2rem;
+      font-weight: 600;
+      animation: slideInUp 1s ease-out 0.3s both;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Back Button */
+    .back-btn {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-light);
+      padding: 1rem;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: var(--shadow-colored);
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1000px;
+      margin: -3rem auto 4rem;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      color: var(--text-dark);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--mendel-green), var(--mendel-green-light));
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(31, 122, 58, 0.05), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .card:hover::after {
+      left: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-colored);
+    }
+
+    h2 {
+      color: var(--mendel-green);
+      margin: 0 0 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    /* Meta Grid */
+    .meta {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      margin-bottom: 2rem;
+    }
+
+    .meta .item {
+      background: rgba(250, 250, 250, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .meta .item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(31, 122, 58, 0.1), transparent);
+      transition: left 0.3s ease;
+    }
+
+    .meta .item:hover::before {
+      left: 100%;
+    }
+
+    .meta .item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(31, 122, 58, 0.15);
+    }
+
+    .meta .k {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .meta .v {
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    /* Team Grid */
+    .team-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .team-member {
+      background: rgba(250, 250, 250, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 1rem;
+      font-weight: 800;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-member::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--mendel-green-light), transparent);
+      opacity: 0.1;
+      transition: left 0.3s ease;
+    }
+
+    .team-member:hover::before {
+      left: 100%;
+    }
+
+    .team-member:hover {
+      transform: translateY(-5px) scale(1.02);
+      background: rgba(74, 222, 128, 0.1);
+      border-color: var(--mendel-green-light);
+      box-shadow: 0 10px 25px rgba(74, 222, 128, 0.2);
+    }
+
+    /* Enhanced Links */
+    .links {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      border-radius: 15px;
+      text-decoration: none;
+      font-weight: 800;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .links a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.3s ease;
+    }
+
+    .links a:hover::before {
+      left: 100%;
+    }
+
+    .links a.primary {
+      background: linear-gradient(135deg, var(--mendel-green), var(--mendel-green-2));
+      color: white;
+      border: none;
+    }
+
+    .links a.secondary {
+      background: white;
+      color: var(--mendel-green);
+      border: 2px solid var(--mendel-green);
+    }
+
+    .links a:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(31, 122, 58, 0.3);
+    }
+
+    .links a.primary:hover {
+      background: linear-gradient(135deg, var(--mendel-green-light), var(--mendel-green));
+    }
+
+    .links a.secondary:hover {
+      background: var(--mendel-green);
+      color: white;
+    }
+
+    /* Enhanced Tabs */
+    .tabs {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      overflow: hidden;
+      background: white;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--mendel-green);
+      user-select: none;
+      transition: all 0.3s ease;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.3s ease;
+    }
+
+    .tab:hover::before {
+      left: 100%;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, var(--mendel-green), var(--mendel-green-2));
+      color: white;
+    }
+
+    .tab:hover {
+      transform: translateY(-2px);
+    }
+
+    .panel {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel ul {
+      padding-left: 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .panel li {
+      margin: 1rem 0;
+      line-height: 1.7;
+    }
+
+    .panel li strong {
+      color: var(--mendel-green);
+    }
+
+    .note {
+      color: #6b7280;
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(107, 114, 128, 0.1);
+      border-radius: 10px;
+      border-left: 4px solid var(--mendel-green);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--mendel-green-2);
+      color: var(--text-light);
+      text-align: center;
+      padding: 3rem 2rem;
+      margin-top: 4rem;
+      font-weight: 700;
+    }
+
+    /* Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.6s ease;
+    }
+
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cursor, .cursor-follower {
+        display: none;
+      }
+      
+      .meta {
+        grid-template-columns: 1fr;
+      }
+      
+      .links {
+        flex-direction: column;
+      }
+      
+      .links a {
+        justify-content: center;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+
+      .back-btn {
+        top: 1rem;
+        left: 1rem;
+        width: 50px;
+        height: 50px;
+      }
+
+      header {
+        padding: 3rem 1rem;
+      }
+
+      main {
+        padding: 0 1rem;
+        margin-top: -2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- Animated Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Back Button -->
+  <a href="javascript:history.back()" class="back-btn" title="Torna indietro">
+    <i class="fas fa-arrow-left"></i>
+  </a>
+
+  <header>
+    <div class="header-content">
+      <h1>Progetto PNRR – "Per una comunità digitale"</h1>
+      <p>IIS "G. Mendel" – Villa Cortese (MI)</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="card reveal">
+      <div class="meta">
+        <div class="item">
+          <div class="k">Avviso / Decreto</div>
+          <div class="v">Formazione del personale scolastico per la transizione digitale nelle scuole statali (<a href="https://www.mim.gov.it/-/decreto-ministeriale-n-66-del-12-aprile-2023" target="_blank" rel="noopener" style="color: var(--mendel-green); font-weight: 800;">D.M. 66/2023</a>)</div>
+        </div>
+        <div class="item">
+          <div class="k">Titolo</div>
+          <div class="v">Per una comunità digitale</div>
+        </div>
+        <div class="item">
+          <div class="k">Codice meccanografico</div>
+          <div class="v">MIIS08300X</div>
+        </div>
+      </div>
+
+      <div class="links">
+        <a class="primary" href="https://pnrr.istruzione.it" target="_blank" rel="noopener">
+          <i class="fas fa-external-link-alt"></i> PNRR
+        </a>
+        <a class="secondary" href="https://www.mim.gov.it/-/decreto-ministeriale-n-66-del-12-aprile-2023" target="_blank" rel="noopener">
+          <i class="fas fa-file-alt"></i> D.M. 66/2023
+        </a>
+        <a class="secondary" href="https://www.agid.gov.it/sites/agid/files/2024-05/digcomp_2.2_italiano.pdf" target="_blank" rel="noopener">
+          <i class="fas fa-download"></i> DigComp 2.2 (IT)
+        </a>
+        <a class="secondary" href="https://digcompedu.cnr.it/DigCompEdu_ITA_FINAL_CNR-ITD.pdf" target="_blank" rel="noopener">
+          <i class="fas fa-download"></i> DigCompEdu (IT)
+        </a>
+      </div>
+    </section>
+
+    <section class="card reveal">
+      <h2><i class="fas fa-users" style="color: var(--mendel-gold); margin-right: 0.5rem;"></i>Team Buone Pratiche</h2>
+      <div class="team-grid">
+        <div class="team-member">Clementi Elisa</div>
+        <div class="team-member">Crespi Massimiliano</div>
+        <div class="team-member">Dino Giorgio</div>
+        <div class="team-member">Pozzi Riccardo</div>
+        <div class="team-member">Rancilio Emanuela</div>
+      </div>
+    </section>
+
+    <section class="card reveal">
+      <div class="tabs" role="tablist" aria-label="Seleziona visualizzazione">
+        <div id="tab-summary" class="tab active" role="tab" aria-controls="panel-summary" aria-selected="true">
+          <i class="fas fa-list"></i> Sintesi
+        </div>
+        <div id="tab-full" class="tab" role="tab" aria-controls="panel-full" aria-selected="false">
+          <i class="fas fa-file-text"></i> Testo completo
+        </div>
+      </div>
+
+      <div id="panel-summary" class="panel active" role="tabpanel" aria-labelledby="tab-summary">
+        <h2>In sintesi</h2>
+        <p>
+          Il progetto PNRR <strong>"Per una comunità digitale"</strong> (<a href="https://www.mim.gov.it/-/decreto-ministeriale-n-66-del-12-aprile-2023" target="_blank" style="color: var(--mendel-green); font-weight: 800;">D.M. 66/2023</a>) mira a potenziare le
+          <strong>competenze digitali</strong> di docenti, ATA e studenti, in linea con i quadri
+          <a href="https://www.agid.gov.it/sites/agid/files/2024-05/digcomp_2.2_italiano.pdf" target="_blank" style="color: var(--mendel-green); font-weight: 800;">DigComp 2.2 (IT)</a> e
+          <a href="https://digcompedu.cnr.it/DigCompEdu_ITA_FINAL_CNR-ITD.pdf" target="_blank" style="color: var(--mendel-green); font-weight: 800;">DigCompEdu (IT)</a>.
+        </p>
+        <ul>
+          <li><strong>Avanguardia docenti</strong>: gruppo di almeno 15 insegnanti formati come leadership dell'innovazione (IA, robotica) con formazione online/blended.</li>
+          <li><strong>Laboratori pratici</strong>: nella seconda annualità, attività sul campo condotte dai docenti leader e da esperti esterni, con valutazione delle competenze.</li>
+          <li><strong>Comunità di Pratiche</strong>: ambiente stabile per studio, confronto e condivisione; aggiornamento del curricolo digitale e del PTOF.</li>
+          <li><strong>ATA</strong>: focus su Assistenti Amministrativi per la gestione di segreteria digitale e piattaforme PA.</li>
+        </ul>
+        <p class="note">La proposta progettuale ufficiale è disponibile sulla piattaforma ministeriale Scuola Futura (accesso con SPID/CIE).</p>
+      </div>
+
+      <div id="panel-full" class="panel" role="tabpanel" aria-labelledby="tab-full">
+        <h2>Descrizione completa</h2>
+        <p>
+          La finalità del progetto consiste nel raggiungimento dei traguardi di competenza digitale da parte di utenti e personale
+          coerenti con il quadro di riferimento <a href="https://www.agid.gov.it/sites/agid/files/2024-05/digcomp_2.2_italiano.pdf" target="_blank" style="color: var(--mendel-green); font-weight: 800;">DigComp 2.2 (IT)</a> e
+          <a href="https://digcompedu.cnr.it/DigCompEdu_ITA_FINAL_CNR-ITD.pdf" target="_blank" style="color: var(--mendel-green); font-weight: 800;">DigCompEdu (IT)</a>,
+          dato che si presuppongono prioritarie e imprescindibili le competenze del personale docente per conseguire l'obiettivo ultimo
+          delle competenze e del curricolo digitale degli studenti, così come sono imprescindibili le competenze digitali ATA per far fronte alla
+          digitalizzazione dei processi della PA, di ANAC, acquisti, ecc.
+        </p>
+        <ul>
+          <li>
+            La costruzione di un congruo gruppo di docenti (almeno 15) formato per costituirsi come avanguardia e leadership dell'innovazione e della trasformazione digitale a disposizione della comunità scolastica; all'interno del gruppo verrà favorita la specializzazione su alcuni filoni o tematiche d'interesse (es. Intelligenza artificiale, robotica, etc.), tale gruppo è il primo ad essere avviato a una formazione in modalità on line e/o blended;
+          </li>
+          <li>
+            Nella seconda annualità del progetto ci si incentrerà sull'attivazione di laboratori tematici di formazione sul campo a favore del personale, tenuti sia dai componenti del gruppo di leadership, anche sulla base dell'expertise individuale, sia da esperti esterni con contributi mirati e funzioni di supporto alla valutazione delle ricadute sul piano delle competenze raggiunte;
+          </li>
+          <li>
+            La costituzione di una Comunità di Pratiche sarà il portato graduale e contestuale delle due fasi precedenti, intesa come ambiente di studio, confronto e condivisione organizzato e destinato a diventare strutturale, entro il quale agire, in prospettiva, una innovazione metodologica continua e sostenibile.
+            Parallelamente si perfezionerà l'aggiornamento del curricolo digitale trasversale degli studenti e del PTOF, con l'obiettivo di un "Piano di Miglioramento Digitale" per l'intera comunità scolastica.
+            Per la formazione del personale ATA si curerà, in particolare, il profilo degli Assistenti Amministrativi, dato che operano su piattaforme digitali e usano la segreteria digitale.
+          </li>
+        </ul>
+        <p><strong>Proposta progettuale</strong>: consultabile su <a href="https://pnrr.istruzione.it" target="_blank" style="color: var(--mendel-green); font-weight: 800;">PNRR – Scuola Futura</a> (accesso SPID/CIE).</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2025 – Pagina realizzata dal Team Buone Pratiche dell'IIS Mendel</footer>
+
+  <script>
+    // Loading Animation
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loadingOverlay').classList.add('hidden');
+      }, 1500);
+    });
+
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    const cursorFollower = document.getElementById('cursorFollower');
+
+    if (window.innerWidth > 768) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        setTimeout(() => {
+          cursorFollower.style.left = e.clientX + 'px';
+          cursorFollower.style.top = e.clientY + 'px';
+        }, 100);
+      });
+
+      // Cursor effects on hover
+      const interactiveElements = document.querySelectorAll('a, button, .tab, .team-member');
+      interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.style.transform = 'scale(1.5)';
+          cursorFollower.style.transform = 'scale(1.5)';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.style.transform = 'scale(1)';
+          cursorFollower.style.transform = 'scale(1)';
+        });
+      });
+    }
+
+    // Animated Particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.width = particle.style.height = Math.random() * 4 + 1 + 'px';
+        particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+    createParticles();
+
+    // Reveal Animation
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Tab functionality
+    const tabSummary = document.getElementById('tab-summary');
+    const tabFull = document.getElementById('tab-full');
+    const panelSummary = document.getElementById('panel-summary');
+    const panelFull = document.getElementById('panel-full');
+
+    function activate(tab) {
+      if (tab === 'summary') {
+        tabSummary.classList.add('active');
+        tabFull.classList.remove('active');
+        panelSummary.classList.add('active');
+        panelFull.classList.remove('active');
+        tabSummary.setAttribute('aria-selected', 'true');
+        tabFull.setAttribute('aria-selected', 'false');
+      } else {
+        tabFull.classList.add('active');
+        tabSummary.classList.remove('active');
+        panelFull.classList.add('active');
+        panelSummary.classList.remove('active');
+        tabFull.setAttribute('aria-selected', 'true');
+        tabSummary.setAttribute('aria-selected', 'false');
+      }
+    }
+
+    if (tabSummary && tabFull) {
+      tabSummary.addEventListener('click', () => activate('summary'));
+      tabFull.addEventListener('click', () => activate('full'));
+    }
+  </script>
+</body>
+</html>
